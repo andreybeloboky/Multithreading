@@ -1,4 +1,4 @@
-package by.beloboky.calculateVowelsFromFifthFile;
+package by.beloboky.countVowelsFromFifthFile;
 
 import java.io.File;
 import java.io.IOException;

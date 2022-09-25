@@ -1,4 +1,4 @@
-package by.beloboky.calculateAllLetterFromFiles;
+package by.beloboky.countAllLetterFromFiles;
 
 import java.io.IOException;
 import java.nio.file.Files;

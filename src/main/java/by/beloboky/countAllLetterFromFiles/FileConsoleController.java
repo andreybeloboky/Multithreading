@@ -1,11 +1,11 @@
-package by.beloboky.calculateAllLetterFromFiles;
+package by.beloboky.countAllLetterFromFiles;
 
 import java.util.Map;
 
 public class FileConsoleController {
 
     public static void main(String[] args) {
-        CalculateLettersService findAmountOfLetters = new CalculateLettersService();
+        CountLettersService findAmountOfLetters = new CountLettersService();
         Thread t1 = new Thread(findAmountOfLetters);
         t1.start();
         Thread t2 = new Thread(findAmountOfLetters);

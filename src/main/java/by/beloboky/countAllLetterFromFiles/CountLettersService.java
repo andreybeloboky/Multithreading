@@ -1,13 +1,13 @@
-package by.beloboky.calculateAllLetterFromFiles;
+package by.beloboky.countAllLetterFromFiles;
 
 import java.io.*;
 import java.util.*;
 
-public class CalculateLettersService implements Runnable {
+public class CountLettersService implements Runnable {
     private final LinkedList<String> fileLinkedList;
     private final HashMap<Character, Integer> lettersCount;
 
-    public CalculateLettersService() {
+    public CountLettersService() {
         FileRepository fileRepository = new FileRepository();
         List<String> arr = fileRepository.findFiles();
         this.fileLinkedList = new LinkedList<>();
@@ -28,7 +28,7 @@ public class CalculateLettersService implements Runnable {
     /**
      * @param file - letters of this file must be calculated;
      */
-    public void calculateLetters(String file) {
+    public void countLetters(String file) {
         File file1 = new File(file);
         try (FileInputStream readFile = new FileInputStream(file1);
              BufferedInputStream read = new BufferedInputStream(readFile)) {
@@ -73,7 +73,7 @@ public class CalculateLettersService implements Runnable {
     public synchronized void run() {
         int i = 0;
         while (i < fileLinkedList.size()) {
-            this.calculateLetters(fileLinkedList.pollFirst());
+            this.countLetters(fileLinkedList.pollFirst());
         }
     }
 }

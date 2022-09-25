@@ -1,13 +1,13 @@
-package by.beloboky.calculateVowelsFromFifthFile;
+package by.beloboky.countVowelsFromFifthFile;
 
 public class FileConsoleController {
 
     public static void main(String[] args) {
-        CalculateVowelsService calculateLettersFirst = new CalculateVowelsService("FirstFile");
-        CalculateVowelsService calculateLettersSecond = new CalculateVowelsService("SecondFile");
-        CalculateVowelsService calculateLettersThird = new CalculateVowelsService("ThirdFile");
-        CalculateVowelsService calculateLettersFourth = new CalculateVowelsService("FourthFile");
-        CalculateVowelsService calculateLettersFifth = new CalculateVowelsService("FiveFile");
+        CountVowelsService calculateLettersFirst = new CountVowelsService("FirstFile");
+        CountVowelsService calculateLettersSecond = new CountVowelsService("SecondFile");
+        CountVowelsService calculateLettersThird = new CountVowelsService("ThirdFile");
+        CountVowelsService calculateLettersFourth = new CountVowelsService("FourthFile");
+        CountVowelsService calculateLettersFifth = new CountVowelsService("FiveFile");
         Thread t1 = new Thread(calculateLettersFirst, "Thread-1");
         Thread t2 = new Thread(calculateLettersSecond, "Thread-2");
         Thread t3 = new Thread(calculateLettersThird, "Thread-3");

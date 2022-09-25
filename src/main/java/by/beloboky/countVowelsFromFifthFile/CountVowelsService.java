@@ -1,9 +1,9 @@
-package by.beloboky.calculateVowelsFromFifthFile;
+package by.beloboky.countVowelsFromFifthFile;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class CalculateVowelsService implements Runnable {
+public class CountVowelsService implements Runnable {
 
     private final List<String> filePath;
     private final List<Character> vowelsArray;
@@ -12,7 +12,7 @@ public class CalculateVowelsService implements Runnable {
     /**
      * @param str - file path;
      */
-    public CalculateVowelsService(String str) {
+    public CountVowelsService(String str) {
         FilesRepository readFromFile = new FilesRepository(str);
         this.filePath = readFromFile.readFromFile();
         this.vowelsArray = new LinkedList<>();
