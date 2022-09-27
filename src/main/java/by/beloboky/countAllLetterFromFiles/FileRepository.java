@@ -8,10 +8,11 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class FileRepository {
+    private final String PATH_TO_FILES = "/home/andrey/Desktop/Task/multithreading deadlock/files";
     private final Path path;
 
     public FileRepository() {
-        this.path = Paths.get("/home/andrey/Desktop/Task/multithreading deadlock/files");
+        this.path = Paths.get(PATH_TO_FILES);
     }
 
     /**
@@ -19,7 +20,9 @@ public class FileRepository {
      */
     public List<String> findFiles() {
         try (Stream<Path> arr = Files.walk(path)) {
-            return arr.filter(Files::isRegularFile).map(Path::toString).toList();
+            return arr.filter(Files::isRegularFile)
+                    .map(Path::toString)
+                    .toList();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

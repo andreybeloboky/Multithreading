@@ -5,13 +5,23 @@ import java.util.List;
 import java.util.Objects;
 
 public class CountService implements Runnable {
-    private final LinkedList<String> queueList = new LinkedList<>();
-    private volatile int count = 0;
+    private final LinkedList<String> queueList;
+    private int count;
 
     public CountService() {
         FileRepository list = new FileRepository();
         List<String> arr = list.listFiles();
+        this.queueList = new LinkedList<>();
         this.queueList.addAll(arr);
+        this.count = 0;
+    }
+
+    /**
+     * @return - string from list if it isn't null;
+     */
+    private synchronized String init() {
+        String s = queueList.pollFirst();
+        return Objects.requireNonNullElseGet(s, () -> queueList.pollFirst() + 1);
     }
 
     /**
@@ -26,11 +36,11 @@ public class CountService implements Runnable {
      * @see Thread#run()
      */
     @Override
-    public synchronized void run() {
+    public void run() {
         int i = 0;
         while (i < queueList.size()) {
-            if (Objects.requireNonNull(queueList.pollFirst()).endsWith(".sh")) {
-                count++;
+            if (this.init().endsWith(".sh")) {
+                this.count++;
             }
         }
     }

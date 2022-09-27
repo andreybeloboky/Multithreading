@@ -10,9 +10,10 @@ import java.util.stream.Stream;
 public class FileRepository {
 
     private final Path path;
+    private final String DIRECTORY = "/home";
 
     public FileRepository() {
-        this.path = Paths.get("/home");
+        this.path = Paths.get(DIRECTORY);
     }
 
     /**

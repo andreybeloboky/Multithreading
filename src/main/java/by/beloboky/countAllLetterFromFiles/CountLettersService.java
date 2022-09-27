@@ -1,22 +1,34 @@
 package by.beloboky.countAllLetterFromFiles;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 public class CountLettersService implements Runnable {
-    private final LinkedList<String> fileLinkedList;
-    private final HashMap<Character, Integer> lettersCount;
+    private final LinkedList<String> files;
+    private Map<Character, Integer> lettersCount;
 
     public CountLettersService() {
-        FileRepository fileRepository = new FileRepository();
-        List<String> arr = fileRepository.findFiles();
-        this.fileLinkedList = new LinkedList<>();
-        this.fileLinkedList.addAll(arr);
-        this.lettersCount = new HashMap<>();
-        this.makeVowels();
+        this.files = new LinkedList<>();
+        this.initFiles();
+        this.initLetters();
     }
 
-    public void makeVowels() {
+    private void initFiles() {
+        FileRepository fileRepository = new FileRepository();
+        List<String> arr = fileRepository.findFiles();
+        this.files.addAll(arr);
+    }
+
+    private void initLetters() {
+        this.lettersCount = new HashMap<>();
         for (char i = 65; i <= 90; i++) {
             this.lettersCount.put(i, 0);
         }
@@ -26,36 +38,39 @@ public class CountLettersService implements Runnable {
     }
 
     /**
-     * @param file - letters of this file must be calculated;
+     * @param filePaths - letters of this filePaths must be calculated;
      */
-    public void countLetters(String file) {
-        File file1 = new File(file);
-        try (FileInputStream readFile = new FileInputStream(file1);
-             BufferedInputStream read = new BufferedInputStream(readFile)) {
-            int number;
-            while ((number = read.read()) != -1) {
-                incrementIfExists(lettersCount, number);
-            }
+    public void countLetters(String filePaths) {
+        File file = new File(filePaths);
+        try (Stream<String> streamFromFiles = Files.lines(file.toPath(), StandardCharsets.UTF_8)) {
+            List<String> str = streamFromFiles.toList();
+            incrementIfExists(str);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
     }
 
     /**
-     * @param lettersCount - hashmap with the letters and amount(numbers)
-     * @param number - byte from some file.
+     * @param str - byte from some file.
      */
-    public void incrementIfExists(HashMap<Character, Integer> lettersCount, int number) {
-        if (lettersCount.containsKey((char) number)) {
-            lettersCount.replace((char) number, lettersCount.get((char) number) + 1);
+    public void incrementIfExists(List<String> str) {
+        for (String v : str) {
+            char[] charString = v.toCharArray();
+            for (char value : charString) {
+                lettersCount.computeIfPresent(value, (a, b) -> lettersCount.get(value) + 1);
+            }
         }
     }
 
     /**
      * @return - hashmap with the letters and amount(numbers)
      */
-    public HashMap<Character, Integer> getLettersCount() {
+    public Map<Character, Integer> getLettersCount() {
         return lettersCount;
+    }
+
+    private synchronized String init() {
+        return files.pollFirst();
     }
 
     /**
@@ -70,10 +85,17 @@ public class CountLettersService implements Runnable {
      * @see Thread#run()
      */
     @Override
-    public synchronized void run() {
+    public void run() {
+        long nanoTime = System.nanoTime();
         int i = 0;
-        while (i < fileLinkedList.size()) {
-            this.countLetters(fileLinkedList.pollFirst());
+        int j = 0;
+        while (i < files.size()) {
+            this.countLetters(this.init());
+            j++;
         }
+        System.out.println();
+        System.out.printf("Thread %s process all files by %s. Files - %s",
+                Thread.currentThread().getId(),
+                System.nanoTime() - nanoTime, j);
     }
 }

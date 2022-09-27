@@ -9,7 +9,7 @@ public class Cat {
     }
 
     public synchronized void methodOne(Cat cat) {
-        System.out.format("%s: %s" + "%n", this.name, cat.getName());
+        System.out.format("%s: %s test" + "%n", this.name, cat.getName());
         cat.methodTwo(this);
     }
 

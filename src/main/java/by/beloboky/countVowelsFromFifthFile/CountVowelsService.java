@@ -1,40 +1,50 @@
 package by.beloboky.countVowelsFromFifthFile;
 
+import by.beloboky.countAllLetterFromFiles.FileRepository;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 public class CountVowelsService implements Runnable {
 
-    private final List<String> filePath;
+    private final LinkedList<String> files;
     private final List<Character> vowelsArray;
-    private int count = 0;
+    private volatile int count = 0;
 
-    /**
-     * @param str - file path;
-     */
-    public CountVowelsService(String str) {
-        FilesRepository readFromFile = new FilesRepository(str);
-        this.filePath = readFromFile.readFromFile();
+    public CountVowelsService() {
+        this.files = new LinkedList<>();
         this.vowelsArray = new LinkedList<>();
-        this.makeVowels(this.vowelsArray);
+        this.initFiles();
+        this.initVowelsArray();
     }
 
-    /**
-     * @param vowels - vowel letters;
-     */
-    public void makeVowels(List<Character> vowels) {
-        vowels.add('a');
-        vowels.add('A');
-        vowels.add('e');
-        vowels.add('E');
-        vowels.add('I');
-        vowels.add('i');
-        vowels.add('O');
-        vowels.add('o');
-        vowels.add('U');
-        vowels.add('u');
-        vowels.add('Y');
-        vowels.add('y');
+    private void initFiles() {
+        FilesRepository readFromFile = new FilesRepository();
+        List<String> arr = readFromFile.readFromFile();
+        this.files.addAll(arr);
+    }
+
+    public void initVowelsArray() {
+        this.vowelsArray.add('a');
+        this.vowelsArray.add('A');
+        this.vowelsArray.add('e');
+        this.vowelsArray.add('E');
+        this.vowelsArray.add('I');
+        this.vowelsArray.add('i');
+        this.vowelsArray.add('O');
+        this.vowelsArray.add('o');
+        this.vowelsArray.add('U');
+        this.vowelsArray.add('u');
+        this.vowelsArray.add('Y');
+        this.vowelsArray.add('y');
     }
 
     /**
@@ -42,6 +52,43 @@ public class CountVowelsService implements Runnable {
      */
     public int getCount() {
         return count;
+    }
+
+    /**
+     * @return - string from list if it isn't null;
+     */
+    private synchronized String init() {
+        String s = files.pollFirst();
+        return Objects.requireNonNullElseGet(s, () -> files.pollFirst() + 1);
+    }
+
+    /**
+     * @param s - path to file.
+     */
+    private void readFile(String s) {
+        File file = new File(s);
+        try (Stream<String> streamFromFiles = Files.lines(file.toPath(), StandardCharsets.UTF_8)) {
+            List<String> str = streamFromFiles.toList();
+            countVowels(str);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    /**
+     * @param list - text from File.
+     */
+    private synchronized void countVowels(List<String> list) {
+        for (String value : list) {
+            char[] fromStringToChar = value.toCharArray();
+            for (char stringAsChar : fromStringToChar) {
+                for (char vowels : vowelsArray) {
+                    if (stringAsChar == vowels) {
+                        this.count++;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -57,15 +104,9 @@ public class CountVowelsService implements Runnable {
      */
     @Override
     public void run() {
-        for (String s : filePath) {
-            char[] ch = s.toCharArray();
-            for (char value : ch) {
-                for (char vowels : vowelsArray) {
-                    if (value == vowels) {
-                        count++;
-                    }
-                }
-            }
+        int i = 0;
+        while (i < files.size()) {
+            this.readFile(this.init());
         }
     }
 }
