@@ -21,6 +21,13 @@ public class CountLettersService implements Runnable {
         this.initLetters();
     }
 
+    /**
+     * @return - hashmap with the letters and amount(numbers)
+     */
+    public Map<Character, Integer> getLettersCount() {
+        return lettersCount;
+    }
+
     private void initFiles() {
         FileRepository fileRepository = new FileRepository();
         List<String> arr = fileRepository.findFiles();
@@ -38,10 +45,10 @@ public class CountLettersService implements Runnable {
     }
 
     /**
-     * @param filePaths - letters of this filePaths must be calculated;
+     * @param filePath - letters of this filePaths must be calculated;
      */
-    public void countLetters(String filePaths) {
-        File file = new File(filePaths);
+    private void countLetters(String filePath) {
+        File file = new File(filePath);
         try (Stream<String> streamFromFiles = Files.lines(file.toPath(), StandardCharsets.UTF_8)) {
             List<String> str = streamFromFiles.toList();
             incrementIfExists(str);
@@ -51,9 +58,9 @@ public class CountLettersService implements Runnable {
     }
 
     /**
-     * @param str - byte from some file.
+     * @param str - text (strings in array) from File.
      */
-    public void incrementIfExists(List<String> str) {
+    private void incrementIfExists(List<String> str) {
         for (String v : str) {
             char[] charString = v.toCharArray();
             for (char value : charString) {
@@ -63,14 +70,17 @@ public class CountLettersService implements Runnable {
     }
 
     /**
-     * @return - hashmap with the letters and amount(numbers)
+     * @return take first element from List and delete/remove its immediately.
      */
-    public Map<Character, Integer> getLettersCount() {
-        return lettersCount;
+    private synchronized String poll() {
+        return files.pollFirst();
     }
 
-    private synchronized String init() {
-        return files.pollFirst();
+    private synchronized void takeElementFromList(){
+        int i = 0;
+        while (i < files.size()) {
+            this.countLetters(this.poll());
+        }
     }
 
     /**
@@ -86,16 +96,6 @@ public class CountLettersService implements Runnable {
      */
     @Override
     public void run() {
-        long nanoTime = System.nanoTime();
-        int i = 0;
-        int j = 0;
-        while (i < files.size()) {
-            this.countLetters(this.init());
-            j++;
-        }
-        System.out.println();
-        System.out.printf("Thread %s process all files by %s. Files - %s",
-                Thread.currentThread().getId(),
-                System.nanoTime() - nanoTime, j);
+        this.takeElementFromList();
     }
 }

@@ -1,6 +1,7 @@
 package by.beloboky.countNumbersShFiles;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,7 +24,7 @@ public class FileRepository {
         try (Stream<Path> arr = Files.walk(this.path)) {
             return arr.filter(Files::isRegularFile).map(Path::toString).toList();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
     }
 }

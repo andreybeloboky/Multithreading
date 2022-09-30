@@ -82,7 +82,7 @@ public class CountVowelsService implements Runnable {
         for (String value : list) {
             char[] fromStringToChar = value.toCharArray();
             for (char stringAsChar : fromStringToChar) {
-                for (char vowels : vowelsArray) {
+                for (char vowels : this.vowelsArray) {
                     if (stringAsChar == vowels) {
                         this.count++;
                     }

@@ -1,6 +1,7 @@
 package by.beloboky.countAllLetterFromFiles;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,7 +25,7 @@ public class FileRepository {
                     .map(Path::toString)
                     .toList();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
     }
 }
