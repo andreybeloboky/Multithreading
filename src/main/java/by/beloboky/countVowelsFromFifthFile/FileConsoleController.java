@@ -15,11 +15,10 @@ public class FileConsoleController {
         t4.start();
         t5.start();
         try {
-            Thread.sleep(100);
+            t1.join();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
         System.out.println(calculateLetters.getCount());
     }
 }

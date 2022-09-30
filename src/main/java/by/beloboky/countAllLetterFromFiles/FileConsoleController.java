@@ -18,13 +18,13 @@ public class FileConsoleController {
             Thread t5 = new Thread(countLettersService);
             t5.start();
 
-            try {
-                Thread.sleep(TimeUnit.SECONDS.toMillis(1));
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            System.out.println();
-            for (Map.Entry<Character, Integer> entry : countLettersService.getLettersCount().entrySet()) {
+        try {
+            t5.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        for (Map.Entry<Character, Integer> entry : countLettersService.getLettersCount().entrySet()) {
                 System.out.println(entry.getKey() + " " + entry.getValue());
             }
         }

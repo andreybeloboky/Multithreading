@@ -18,7 +18,7 @@ public class FileConsoleController {
         t6.start();
         t7.start();
         try {
-            Thread.sleep(200);
+            t1.join();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
