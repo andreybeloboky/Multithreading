@@ -16,6 +16,10 @@ public class FileConsoleController {
         t5.start();
         try {
             t1.join();
+            t2.join();
+            t3.join();
+            t4.join();
+            t5.join();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
