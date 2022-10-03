@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class CountLettersService implements Runnable {
-    private final LinkedList<String> files;
+    private final LinkedList<Path> files;
     private Map<Character, Integer> lettersCount;
 
     public CountLettersService() {
@@ -30,7 +32,7 @@ public class CountLettersService implements Runnable {
 
     private void initFiles() {
         FileRepository fileRepository = new FileRepository();
-        List<String> arr = fileRepository.findFiles();
+        List<Path> arr = fileRepository.findFiles();
         this.files.addAll(arr);
     }
 
@@ -47,9 +49,9 @@ public class CountLettersService implements Runnable {
     /**
      * @param filePath - letters of this filePaths must be calculated;
      */
-    private void countLetters(String filePath) {
-        File file = new File(filePath);
-        try (Stream<String> streamFromFiles = Files.lines(file.toPath(), StandardCharsets.UTF_8)) {
+    private void countLetters(Path filePath) {
+        Path file = Paths.get(String.valueOf(filePath));
+        try (Stream<String> streamFromFiles = Files.lines(file, StandardCharsets.UTF_8)) {
             List<String> str = streamFromFiles.toList();
             incrementIfExists(str);
         } catch (IOException e) {
@@ -72,7 +74,7 @@ public class CountLettersService implements Runnable {
     /**
      * @return take first element from List and delete/remove its immediately.
      */
-    private synchronized String poll() {
+    private synchronized Path poll() {
         return files.pollFirst();
     }
 

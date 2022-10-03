@@ -19,11 +19,9 @@ public class FileRepository {
     /**
      * @return - List<String> which consists(includes) name of the 50th files.
      */
-    public List<String> findFiles() {
+    public List<Path> findFiles() {
         try (Stream<Path> arr = Files.walk(path)) {
-            return arr.filter(Files::isRegularFile)
-                    .map(Path::toString)
-                    .toList();
+            return arr.filter(Files::isRegularFile).toList();
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
