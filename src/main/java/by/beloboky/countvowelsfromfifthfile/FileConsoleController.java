@@ -1,4 +1,4 @@
-package by.beloboky.countVowelsFromFifthFile;
+package by.beloboky.countvowelsfromfifthfile;
 
 public class FileConsoleController {
 

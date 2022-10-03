@@ -1,13 +1,10 @@
-package by.beloboky.countVowelsFromFifthFile;
-
-import by.beloboky.countAllLetterFromFiles.FileRepository;
+package by.beloboky.countvowelsfromfifthfile;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;

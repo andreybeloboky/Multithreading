@@ -1,7 +1,6 @@
-package by.beloboky.countAllLetterFromFiles;
+package by.beloboky.countallletterfromfiles;
 
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class FileConsoleController {
 

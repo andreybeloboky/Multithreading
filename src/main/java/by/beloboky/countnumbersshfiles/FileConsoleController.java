@@ -1,4 +1,4 @@
-package by.beloboky.countNumbersShFiles;
+package by.beloboky.countnumbersshfiles;
 
 public class FileConsoleController {
     public static void main(String[] args) {

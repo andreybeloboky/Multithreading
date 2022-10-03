@@ -1,4 +1,4 @@
-package by.beloboky.countNumbersShFiles;
+package by.beloboky.countnumbersshfiles;
 
 import java.util.LinkedList;
 import java.util.List;
