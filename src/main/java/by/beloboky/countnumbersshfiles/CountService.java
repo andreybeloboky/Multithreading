@@ -1,16 +1,17 @@
 package by.beloboky.countnumbersshfiles;
 
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 public class CountService implements Runnable {
-    private final LinkedList<String> queueList;
+    private final LinkedList<Path> queueList;
     private int count;
 
     public CountService() {
         FileRepository list = new FileRepository();
-        List<String> arr = list.listFiles();
+        List<Path> arr = list.listFiles();
         this.queueList = new LinkedList<>();
         this.queueList.addAll(arr);
         this.count = 0;
@@ -20,8 +21,7 @@ public class CountService implements Runnable {
      * @return - string from list if it isn't null;
      */
     private synchronized String init() {
-        String s = queueList.pollFirst();
-        return Objects.requireNonNullElseGet(s, () -> queueList.pollFirst() + 1);
+        return Objects.requireNonNull(queueList.pollFirst()).toString();
     }
 
     /**

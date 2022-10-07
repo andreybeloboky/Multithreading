@@ -26,7 +26,7 @@ public class FileConsoleController {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
+        
         for (Map.Entry<Character, Integer> entry : countLettersService.getLettersCount().entrySet()) {
             System.out.println(entry.getKey() + " " + entry.getValue());
         }

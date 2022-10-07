@@ -20,9 +20,9 @@ public class FileRepository {
     /**
      * @return - List<String> with all home fields (files).
      */
-    public List<String> listFiles() {
+    public List<Path> listFiles() {
         try (Stream<Path> arr = Files.walk(this.path)) {
-            return arr.filter(Files::isRegularFile).map(Path::toString).toList();
+            return arr.filter(Files::isRegularFile).toList();
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

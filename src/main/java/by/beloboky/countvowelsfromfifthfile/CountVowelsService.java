@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -12,7 +13,7 @@ import java.util.stream.Stream;
 
 public class CountVowelsService implements Runnable {
 
-    private final LinkedList<String> files;
+    private final LinkedList<Path> files;
     private final List<Character> vowelsArray;
     private volatile int count = 0;
 
@@ -25,7 +26,7 @@ public class CountVowelsService implements Runnable {
 
     private void initFiles() {
         FilesRepository readFromFile = new FilesRepository();
-        List<String> arr = readFromFile.readFromFile();
+        List<Path> arr = readFromFile.readFromFile();
         this.files.addAll(arr);
     }
 
@@ -55,8 +56,7 @@ public class CountVowelsService implements Runnable {
      * @return - string from list if it isn't null;
      */
     private synchronized String init() {
-        String s = files.pollFirst();
-        return Objects.requireNonNullElseGet(s, () -> files.pollFirst() + 1);
+        return Objects.requireNonNull(files.pollFirst()).toString();
     }
 
     /**

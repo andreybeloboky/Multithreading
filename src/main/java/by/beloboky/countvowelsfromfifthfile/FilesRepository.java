@@ -20,9 +20,9 @@ public class FilesRepository {
     /**
      * @return The List includes string of text.
      */
-    public List<String> readFromFile() {
+    public List<Path> readFromFile() {
         try (Stream<Path> text = Files.list(file)) {
-            return text.filter(Files::isRegularFile).map(Path::toString).toList();
+            return text.filter(Files::isRegularFile).toList();
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
